@@ -1,3 +1,4 @@
+import { JwtPayload } from "jsonwebtoken";
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponst";
 import { UserServices } from "./user.service";
@@ -15,6 +16,19 @@ const createUser = catchAsync(async (req, res) => {
     });
 });
 
+const getMe = catchAsync(async (req, res) => {
+    const { userId } = req.user as JwtPayload;
+    const result = await UserServices.getMe(userId);
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: `User is retrieved successfully`,
+        data: result,
+    });
+});
+
 export const UserController = {
     createUser,
+    getMe
 };
