@@ -5,7 +5,8 @@ import httpStatus from 'http-status';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import config from '../config';
 import { TUserRole } from '../modules/user/user.interface';
-import { UserModel } from '../modules/user/user.module';
+import { User } from '../modules/user/user.module';
+
 
 const auth = (...requiredRoles: TUserRole[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -28,7 +29,7 @@ const auth = (...requiredRoles: TUserRole[]) => {
       throw new AppError(httpStatus.UNAUTHORIZED, 'Invalid token payload!');
     }
 
-    const user = await UserModel.isUserExistsByCustomId(userId);
+    const user = await User.isUserExistsByCustomId(userId);
     if (!user) {
       throw new AppError(httpStatus.NOT_FOUND, 'User not found!');
     }

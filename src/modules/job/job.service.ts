@@ -20,7 +20,32 @@ const getJobIntoDB = async () => {
     return result;
 };
 
+const getSingleJobIntoDB = async (id: string) => {
+  const result = await Job.findById(id);
+  return result;
+};
+
+const updateJobRequestIntoDB = async (id: string, payload: TJob) => {
+  const result = await Job.findOneAndUpdate({ _id: id }, payload, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!result) {
+    throw new AppError(httpStatus.FORBIDDEN, 'Booking Info not found');
+  }
+  return result;
+};
+
+const deleteJobIntoDB = async (id: string) => {
+  const result = await Job.deleteOne({ _id: id });
+  return result;
+};
+
 export const JobServices = {
     createJobIntoDB,
-    getJobIntoDB
+    getJobIntoDB,
+    updateJobRequestIntoDB,
+    deleteJobIntoDB,
+    getSingleJobIntoDB
 };
